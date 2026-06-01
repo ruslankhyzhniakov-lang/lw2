@@ -1,0 +1,61 @@
+@startuml classDiagram
+
+class User {
+  - userId: Long
+  - name: String
+  - preferences: List<CuisineType>
+  + getRecommendations(): List<Recommendation>
+  + searchRestaurants(criteria: SearchCriteria): List<Restaurant>
+}
+
+class RestaurantOwner {
+  - ownerId: Long
+  - name: String
+  - restaurant: Long
+  + updateMenu(dishes: List<Dish>)
+  + getStatistics(): RestaurantStats
+}
+
+class Restaurant {
+  - restaurantId: Long
+  - name: String
+  - address: String
+  - location: Location
+  - cuisineType: CuisineType
+  - rating: double
+  + getDishes(): List<Dish>
+  + getReviews(): List<Review>
+}
+
+class Dish {
+  - dishId: Long
+  - name: String
+  - description: String
+  - price: BigDecimal
+  - averageRating: double
+  + calculateRecommendationScore(user: User): double
+}
+
+class Review {
+  - reviewId: Long
+  - rating: int (1-5)
+  - comment: String
+  - createdAt: LocalDateTime
+}
+
+class RecommendationEngine {
+  + generateRecommendations(user: User): List<Dish>
+  + explainRecommendation(dish: Dish, user: User): String
+}
+
+' Зв'язки
+User "1" --> "0..*" Review : writes
+RestaurantOwner "1" --> "1" Restaurant : manages
+Restaurant "1" --> "0..*" Dish : offers
+Restaurant "1" --> "0..*" Review : has
+Dish "1" --> "0..*" Review : has
+RecommendationEngine ..> User : uses
+RecommendationEngine ..> Restaurant : analyzes
+RecommendationEngine ..> Dish : recommends
+
+@enduml
