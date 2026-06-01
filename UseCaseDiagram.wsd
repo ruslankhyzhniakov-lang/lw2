@@ -1,0 +1,29 @@
+@startuml UseCaseDiagram
+left to right direction
+
+
+actor "Користувач" as User
+actor "Власник ресторану" as Owner
+
+rectangle "Restaurant Advisor" {
+    usecase "Переглянути рекомендовані страви" as UC1
+    usecase "Шукати ресторани" as UC2
+    usecase "Переглянути профіль ресторану" as UC3
+    usecase "Фільтрувати ресторани" as UC4
+    usecase "Оновити меню ресторану" as UC5
+    usecase "Переглянути статистику відгуків" as UC6
+
+    
+    User --> UC1
+    UC1 ..> UC3: <<extend>>
+    User --> UC2
+    UC2 ..> UC4: <<extend>>
+    UC4 ..> UC3
+    UC2 ..> UC3
+    UC3 ..> UC6
+    Owner --> UC5
+    Owner --> UC6
+    
+}
+
+@enduml
