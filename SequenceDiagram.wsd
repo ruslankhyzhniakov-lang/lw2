@@ -1,0 +1,21 @@
+@startuml sequenceDiagram
+'на основі UC1 (перегляд рекомендацій)
+actor Користувач
+participant "UI" as UI
+participant "RecommendationService" as Service
+participant "RecommendationEngine" as Engine
+participant "ReviewRepository" as Repo
+
+Користувач -> UI: Запит рекомендацій
+UI -> Service: getPersonalRecommendations(userId)
+Service -> Engine: generateRecommendations(user)
+Engine -> Repo: getUserReviewsAndPreferences(userId)
+Repo --> Engine: reviews + preferences
+Engine -> Engine: analyzePreferences()
+Engine -> Repo: getTopRatedDishesByCuisine()
+Repo --> Engine: dishes
+Engine -> Engine: calculateScores()
+Engine --> Service: List<RecommendationDTO> + explanations
+Service --> UI: Показати рекомендації
+UI --> Користувач: Відобразити список
+@enduml
